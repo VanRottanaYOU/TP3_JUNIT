@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 
 import fr.codevallee.formation.tp.modele.Demo;
 import freemarker.template.Configuration;
@@ -44,7 +45,11 @@ public class Router implements SparkApplication {
 			entityManager.persist(metier);
 			entityManager.getTransaction().commit();
 			entityManager.close();
-
+			
+			entityManager = entityManagerFactory.createEntityManager();
+			TypedQuery<Demo> query = entityManager.createQuery("from Demo", Demo.class);
+			attributes.put("objets", query.getResultList());
+			entityManager.close();
 			return new ModelAndView(attributes, "home.ftl");
 		}, getFreeMarkerEngine());
 
