@@ -3,14 +3,21 @@ package fr.codevallee.formation.tp;
 import static spark.Spark.get;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
+import fr.codevallee.formation.tp.modele.Commune;
 import fr.codevallee.formation.tp.modele.Demo;
+import fr.codevallee.formation.tp.modele.Elu;
+import fr.codevallee.formation.tp.modele.Maire;
+import fr.codevallee.formation.tp.modele.Projet;
 import freemarker.template.Configuration;
 import freemarker.template.Version;
 import spark.ModelAndView;
@@ -19,6 +26,8 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+
 
 public class Router implements SparkApplication {
 
@@ -33,23 +42,71 @@ public class Router implements SparkApplication {
 
 			Map<String, Object> attributes = new HashMap<>();
 
-			// Exemple 1 (à déplacer dans une classe statique !):
 			EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("formation");
 			EntityManager entityManager = entityManagerFactory.createEntityManager();
-
-			// J'ajoute un métier :
-			Demo metier = new Demo();
-			metier.setNom("exemple1");
-
-			entityManager.getTransaction().begin();
-			entityManager.persist(metier);
-			entityManager.getTransaction().commit();
-			entityManager.close();
 			
-			entityManager = entityManagerFactory.createEntityManager();
-			TypedQuery<Demo> query = entityManager.createQuery("from Demo", Demo.class);
-			attributes.put("objets", query.getResultList());
-			entityManager.close();
+			Maire monMaire = new Maire();
+			Commune maCommune = new Commune();
+			Set<Elu> monSetelu = new HashSet<Elu>();
+			Elu premElu = new Elu();
+			Elu deuxElu = new Elu();
+			Set<Projet> monSetProjet = new HashSet<Projet>();
+			Projet premProjet = new Projet();
+			Projet deuxProjet = new Projet();
+			
+			{
+				entityManager.getTransaction().begin();
+				String requeteCommune = "SELECT c FROM Commune c WHERE c.nom = 'LOOS'";
+	//			TypedQuery<Commune> query = entityManager.createQuery(requeteCommune,Commune.class);
+				Query query = entityManager.createQuery(requeteCommune.toString());
+				maCommune = (Commune) query.getResultList().get(0);
+				entityManager.remove(maCommune);
+				entityManager.getTransaction().commit();
+			}
+			
+//			{
+//				//oneToone sans cascade
+//				entityManager.getTransaction().begin();
+//				
+//				monMaire.setNom("Van");
+//				maCommune.setNom("LOOS");
+//				maCommune.setMaire(monMaire);
+//				entityManager.persist(maCommune);	
+//				entityManager.persist(monMaire);
+//
+//				premElu.setNom("Manu");
+//				deuxElu.setNom("Michel");
+//				entityManager.persist(premElu);
+//				entityManager.persist(deuxElu);
+//				monSetelu.add(premElu);
+//				monSetelu.add(deuxElu);
+//				premProjet.setNom("CDN");
+//				deuxProjet.setNom("Auchan");
+//				entityManager.persist(premProjet);
+//				entityManager.persist(deuxProjet);
+//				monSetProjet.add(premProjet);
+//				monSetProjet.add(deuxProjet);
+//				premElu.setProjets(monSetProjet);
+//				
+//				monMaire.setElu(monSetelu);
+//				
+//				
+//				entityManager.flush();	
+//				entityManager.getTransaction().commit();
+//			}	
+
+
+//			TypedQuery<Maire> query = entityManager.createQuery("from Maire", Maire.class);
+//			attributes.put("objets",query.getResultList());
+//			for (Maire m : query.getResultList()) {
+//				System.out.println("1" +m.getNom()+ " ; "+m.getCommune());
+//			}
+//			entityManager.getTransaction().commit();
+//			entityManager.close();
+//			Query query_1 = entityManager.createQuery("SELECT maire from );
+//			Maire monMaire = new Maire();
+//			Commune maCommune = new Commune();
+			
 			return new ModelAndView(attributes, "home.ftl");
 		}, getFreeMarkerEngine());
 
