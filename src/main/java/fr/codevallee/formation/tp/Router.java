@@ -13,10 +13,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
+import fr.codevallee.formation.tp.modele.Bateau;
 import fr.codevallee.formation.tp.modele.Commune;
 import fr.codevallee.formation.tp.modele.Demo;
 import fr.codevallee.formation.tp.modele.Elu;
 import fr.codevallee.formation.tp.modele.Maire;
+import fr.codevallee.formation.tp.modele.Marin;
 import fr.codevallee.formation.tp.modele.Projet;
 import freemarker.template.Configuration;
 import freemarker.template.Version;
@@ -45,24 +47,27 @@ public class Router implements SparkApplication {
 			EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("formation");
 			EntityManager entityManager = entityManagerFactory.createEntityManager();
 			
-			Maire monMaire = new Maire();
-			Commune maCommune = new Commune();
-			Set<Elu> monSetelu = new HashSet<Elu>();
-			Elu premElu = new Elu();
-			Elu deuxElu = new Elu();
-			Set<Projet> monSetProjet = new HashSet<Projet>();
-			Projet premProjet = new Projet();
-			Projet deuxProjet = new Projet();
+//			Maire monMaire = new Maire();
+//			Commune maCommune = new Commune();
+//			Set<Elu> monSetelu = new HashSet<Elu>();
+//			Elu premElu = new Elu();
+//			Elu deuxElu = new Elu();
+//			Set<Projet> monSetProjet = new HashSet<Projet>();
+//			Projet premProjet = new Projet();
+//			Projet deuxProjet = new Projet();
 			
-			{
-				entityManager.getTransaction().begin();
-				String requeteCommune = "SELECT c FROM Commune c WHERE c.nom = 'LOOS'";
-	//			TypedQuery<Commune> query = entityManager.createQuery(requeteCommune,Commune.class);
-				Query query = entityManager.createQuery(requeteCommune.toString());
-				maCommune = (Commune) query.getResultList().get(0);
-				entityManager.remove(maCommune);
-				entityManager.getTransaction().commit();
-			}
+			Marin moonMarin = new Marin();
+			Bateau monBateau = new Bateau();
+			
+//			{//delete commune et cascade
+//				entityManager.getTransaction().begin();
+//				String requeteCommune = "SELECT c FROM Commune c WHERE c.nom = 'LOOS'";
+//	//			TypedQuery<Commune> query = entityManager.createQuery(requeteCommune,Commune.class);
+//				Query query = entityManager.createQuery(requeteCommune.toString());
+//				maCommune = (Commune) query.getResultList().get(0);
+//				entityManager.remove(maCommune);
+//				entityManager.getTransaction().commit();
+//			}
 			
 //			{
 //				//oneToone sans cascade
@@ -94,7 +99,22 @@ public class Router implements SparkApplication {
 //				entityManager.flush();	
 //				entityManager.getTransaction().commit();
 //			}	
-
+			
+			{//conflit transaction
+//				entityManager.getTransaction().begin();
+//				String requeteCommune = "SELECT c FROM Commune c WHERE c.nom = 'LOOS'";
+//	//			TypedQuery<Commune> query = entityManager.createQuery(requeteCommune,Commune.class);
+//				Query query = entityManager.createQuery(requeteCommune.toString());
+//				maCommune = (Commune) query.getResultList().get(0);
+//				maCommune.setNom("LILLE");
+//				entityManager.persist(maCommune);
+//				
+//				query = entityManager.createQuery(requeteCommune.toString());
+//				maCommune = (Commune) query.getResultList().get(0);
+//				maCommune.setNom("LENS");
+//				
+//				entityManager.getTransaction().commit();
+			}
 
 //			TypedQuery<Maire> query = entityManager.createQuery("from Maire", Maire.class);
 //			attributes.put("objets",query.getResultList());

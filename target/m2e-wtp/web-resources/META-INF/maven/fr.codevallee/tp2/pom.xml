@@ -104,7 +104,14 @@
 		  <artifactId>mysql-connector-java</artifactId>
 		  <version>5.1.31</version>
 		</dependency>
-
+		
+		<dependency>
+			<groupId>hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>1.8.0.10</version>
+			<scope>test</scope>
+	    </dependency>
+	
 	</dependencies>
 
 
