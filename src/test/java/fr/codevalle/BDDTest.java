@@ -32,8 +32,9 @@ public class BDDTest {
 		em.persist(monBateau);
 		em.getTransaction().commit();
 
-//		TypedQuery<Bateau> query = em.createQuery("from Bateau", Bateau.class);
-		TypedQuery<Bateau> query = em.createQuery("from YYYYYY", Bateau.class);
+		TypedQuery<Bateau> query = em.createQuery("from Bateau", Bateau.class);
+		//test erreur JENKINS
+//		TypedQuery<Bateau> query = em.createQuery("from YYYYYY", Bateau.class);
 		System.out.println(query.getResultList().size());
 		
 		assertEquals(1, 1);
